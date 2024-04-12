@@ -8,8 +8,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import StudentsClient from "@/components/users";
+import StudentsClient from "@/app/students/users";
 import Link from "next/link";
+import { AddStudentForm } from "./add_student";
 // import router from "next/navigation";
 export default function Student() {
   const students = [
@@ -95,7 +96,7 @@ export default function Student() {
     <div className="">
       <div className="flex justify-between items-center">
         <header className="text-[36px] font-[700]">Students</header>
-        <Button variant="">Add Student</Button>
+        <AddStudentForm/>
       </div>
       <div>
         <Table>

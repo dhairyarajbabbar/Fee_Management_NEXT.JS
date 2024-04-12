@@ -1,17 +1,17 @@
-"use client";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-
+import { Payment, columns } from "./columns";
+import { DataTable } from "./data-table";
 export default function Payments() {
+  const data = [
+    {
+      roll_no: 1,
+      name:"Rohan",
+      payment_date: "01/03/2022",
+      payment_month: "January",
+      method: "Cash",
+      amount: 100
+    },
+  ];
   return (
     <div className="">
       <div className="flex justify-between items-center">
@@ -19,19 +19,7 @@ export default function Payments() {
         <Button variant="">Make Payment</Button>
       </div>
       <div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-md">Roll No.</TableHead>
-              <TableHead className="w-[120px] text-md">Name</TableHead>
-              <TableHead className="text-md ">Payment Date</TableHead>
-              <TableHead className="text-md ">Payment for Month</TableHead>
-              <TableHead className="text-md ">Method</TableHead>
-              <TableHead className="text-md ">Payment Amount</TableHead>
-              <TableHead className="text-md ">Edit</TableHead>
-            </TableRow>
-          </TableHeader>
-        </Table>
+        <DataTable columns={columns} data={data} />
       </div>
     </div>
   );
