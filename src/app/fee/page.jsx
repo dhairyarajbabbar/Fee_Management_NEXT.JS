@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Payment, columns } from "./columns";
-import { DataTable } from "./data-table";
+import { Payment, columns } from "./FeeTables/columns";
+import { DataTable } from "./FeeTables/data-table";
+import { AddFeeButton } from "./addFee/addFee";
 
 export default function Student() {
   const data = [
@@ -81,7 +82,7 @@ export default function Student() {
     <div className="">
       <div className="flex justify-between items-center">
         <header className="text-[36px] font-[700]">Fee</header>
-        <Button variant="">Add Fee</Button>
+        <AddFeeButton/>
       </div>
       <div>
         <DataTable columns={columns} data={data} />

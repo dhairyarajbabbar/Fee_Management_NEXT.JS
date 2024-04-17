@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Payment, columns } from "./columns";
 import { DataTable } from "./data-table";
+import { MakePaymentForm } from "./make-payment"; 
+
 export default function Payments() {
   const data = [
     {
@@ -16,7 +18,7 @@ export default function Payments() {
     <div className="">
       <div className="flex justify-between items-center">
         <header className="text-[36px] font-[700]">Payment</header>
-        <Button variant="">Make Payment</Button>
+        <MakePaymentForm/>
       </div>
       <div>
         <DataTable columns={columns} data={data} />

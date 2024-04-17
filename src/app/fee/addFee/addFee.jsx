@@ -31,7 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/components/ui/use-toast";
 import React from "react";
 
 const today = new Date();
@@ -40,15 +39,12 @@ const formSchema = z
   .object({
     name: z.string().min(2).max(50),
     rollNumber: z.string().min(1),
-    password: z.string().min(5),
-    contact: z.string().min(10).max(10),
-    enrollmentDate: z.date(),
-    feeAmount: z.number().min(0),
     feeType: z.string(),
+    feeAmount: z.number().min(0),
   })
   .refine((data) => {});
 
-export function AddStudentForm() {
+export function AddFeeButton() {
   const [isFormVisible, setisFormVisible] = React.useState(false);
 
   const form = useForm({
@@ -80,7 +76,7 @@ export function AddStudentForm() {
   return (
     <div className="rounded-md border">
       <Button variant="" onClick={() => setisFormVisible(!isFormVisible)}>
-        Add Student
+        Add Fee
       </Button>
 
       {isFormVisible && (
@@ -90,7 +86,7 @@ export function AddStudentForm() {
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className=" flex flex-wrap"
+                  className="space-y-8 flex flex-wrap"
                 >
                   <div className=" flex flex-wrap">
                     <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
@@ -129,43 +125,6 @@ export function AddStudentForm() {
                     <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
                       <FormField
                         control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Enter password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
-                      <FormField
-                        control={form.control}
-                        name="contact"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Contact Number</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Enter contact number"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
-                      <FormField
-                        control={form.control}
                         name="feeType"
                         render={({ field }) => (
                           <FormItem>
@@ -184,9 +143,9 @@ export function AddStudentForm() {
                               </FormControl>
                               <SelectContent>
                                 <SelectItem value="Monthly">Monthly</SelectItem>
-                                <SelectItem value="One Time">
-                                  One Time
-                                </SelectItem>
+                                <SelectItem value="Quarterly">Quarterly</SelectItem>
+                                <SelectItem value="Yearly">Yearly</SelectItem>
+                                <SelectItem value="One Time">One Time</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -206,7 +165,9 @@ export function AddStudentForm() {
                                 type="number"
                                 placeholder="Enter monthly fee"
                                 {...field}
-                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                onChange={(e) =>
+                                  field.onChange(parseFloat(e.target.value))
+                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -214,55 +175,9 @@ export function AddStudentForm() {
                         )}
                       />
                     </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
-                      <FormField
-                        control={form.control}
-                        name="enrollment_date"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col gap-y-[6px]">
-                            <FormLabel className="mt-1">Enrollment Date</FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                      "pl-3 text-left font-normal",
-                                      !field.value && "text-muted-foreground"
-                                    )}
-                                  >
-                                    {field.value ? (
-                                      format(field.value, "PPP")
-                                    ) : (
-                                      <span>Enrollment Date</span>
-                                    )}
-                                    <CalendarDays className="ml-auto h-4 w-4 opacity-50" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  onSelect={field.onChange}
-                                  disabled={(date) =>
-                                    date > new Date() ||
-                                    date < new Date("1900-01-01")
-                                  }
-                                  initialFocus
-                                />
-                              </PopoverContent>
-                            </Popover>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="md:mt-5 w-full md:w-1/2 pr-0 md:pr-4 flex justify-end">
-                      <Button type="submit" >Submit</Button>
-                    </div>
+                  </div>
+                  <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
+                    <Button type="submit">Submit</Button>
                   </div>
                 </form>
               </Form>

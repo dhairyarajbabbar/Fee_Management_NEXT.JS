@@ -31,7 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/components/ui/use-toast";
 import React from "react";
 
 const today = new Date();
@@ -40,15 +39,12 @@ const formSchema = z
   .object({
     name: z.string().min(2).max(50),
     rollNumber: z.string().min(1),
-    password: z.string().min(5),
-    contact: z.string().min(10).max(10),
     enrollmentDate: z.date(),
-    feeAmount: z.number().min(0),
     feeType: z.string(),
   })
   .refine((data) => {});
 
-export function AddStudentForm() {
+export function MakePaymentForm() {
   const [isFormVisible, setisFormVisible] = React.useState(false);
 
   const form = useForm({
@@ -80,7 +76,7 @@ export function AddStudentForm() {
   return (
     <div className="rounded-md border">
       <Button variant="" onClick={() => setisFormVisible(!isFormVisible)}>
-        Add Student
+        Make Payment
       </Button>
 
       {isFormVisible && (
@@ -90,7 +86,7 @@ export function AddStudentForm() {
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className=" flex flex-wrap"
+                  className="space-y-8 flex flex-wrap"
                 >
                   <div className=" flex flex-wrap">
                     <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
@@ -118,43 +114,6 @@ export function AddStudentForm() {
                             <FormControl>
                               <Input
                                 placeholder="Enter roll number"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
-                      <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Enter password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
-                      <FormField
-                        control={form.control}
-                        name="contact"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Contact Number</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Enter contact number"
                                 {...field}
                               />
                             </FormControl>
@@ -197,30 +156,10 @@ export function AddStudentForm() {
                     <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
                       <FormField
                         control={form.control}
-                        name="feeAmount"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Fee Amount</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="number"
-                                placeholder="Enter monthly fee"
-                                {...field}
-                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
-                      <FormField
-                        control={form.control}
-                        name="enrollment_date"
+                        name="deposit_date"
                         render={({ field }) => (
                           <FormItem className="flex flex-col gap-y-[6px]">
-                            <FormLabel className="mt-1">Enrollment Date</FormLabel>
+                            <FormLabel className="mt-1">Deposit Date</FormLabel>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <FormControl>
@@ -260,9 +199,9 @@ export function AddStudentForm() {
                         )}
                       />
                     </div>
-                    <div className="md:mt-5 w-full md:w-1/2 pr-0 md:pr-4 flex justify-end">
-                      <Button type="submit" >Submit</Button>
-                    </div>
+                  </div>
+                  <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
+                    <Button type="submit">Submit</Button>
                   </div>
                 </form>
               </Form>

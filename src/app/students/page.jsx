@@ -1,17 +1,6 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import StudentsClient from "@/app/students/users";
-import Link from "next/link";
+import { Payment, columns } from "./columns";
+import { DataTable } from "./data-table";
 import { AddStudentForm } from "./add_student";
-// import router from "next/navigation";
 export default function Student() {
   const students = [
     {
@@ -96,21 +85,10 @@ export default function Student() {
     <div className="">
       <div className="flex justify-between items-center">
         <header className="text-[36px] font-[700]">Students</header>
-        <AddStudentForm/>
+        <AddStudentForm />
       </div>
       <div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px] text-md">Roll No.</TableHead>
-              <TableHead className="text-md">Name</TableHead>
-              <TableHead className="text-md">Class</TableHead>
-              <TableHead className="text-md">Contact</TableHead>
-              <TableHead className="text-md">Due Fee</TableHead>
-            </TableRow>
-          </TableHeader>
-        </Table>
-        <StudentsClient students={students} />
+        <DataTable columns={columns} data={students} />
       </div>
     </div>
   );
