@@ -20,7 +20,7 @@ export default function SingleFeeTable(props) {
             &times;
           </button>
         </div>
-        <SingleDataTable columns={single_table_columns} data={props.selectedRow.fee_statuses}/>
+        <SingleDataTable columns={single_table_columns} data={props.selectedRow.feeDetails}/>
       </div>
     </div>
   );

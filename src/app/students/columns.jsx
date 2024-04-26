@@ -15,7 +15,7 @@ import {
 
 export const columns = [
   {
-    accessorKey: "roll_no",
+    accessorKey: "rollNumber",
     header: "Roll No.",
   },
   {
@@ -31,7 +31,7 @@ export const columns = [
     header: "Contact",
   },
   {
-    accessorKey: "due_fee",
+    accessorKey: "dueFee",
     header: "Due Fee",
   },
   {

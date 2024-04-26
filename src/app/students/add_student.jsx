@@ -31,7 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/components/ui/use-toast";
 import React from "react";
 
 const today = new Date();
@@ -43,18 +42,19 @@ const formSchema = z
     password: z.string().min(5),
     contact: z.string().min(10).max(10),
     enrollmentDate: z.date(),
-    feeAmount: z.number().min(0),
+    amount: z.number().min(0),
     feeType: z.string(),
+    class: z.string(),
   })
   .refine((data) => {});
 
-export function AddStudentForm() {
+export function AddStudentForm({ action }) {
   const [isFormVisible, setisFormVisible] = React.useState(false);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      name: "",
     },
   });
   React.useEffect(() => {
@@ -74,8 +74,11 @@ export function AddStudentForm() {
     };
   }, [isFormVisible]);
 
-  function onSubmit(values) {
-    console.log(values);
+  function onSubmit(e) {
+    e.preventDefault();
+    const formData = form.getValues();
+    console.log(formData);
+    action(formData); 
   }
   return (
     <div className="rounded-md border">
@@ -89,14 +92,14 @@ export function AddStudentForm() {
             <div className="p-6 flex justify-between items-center">
               <Form {...form}>
                 <form
-                  onSubmit={form.handleSubmit(onSubmit)}
+                  onSubmit={onSubmit}
                   className=" flex flex-wrap"
                 >
                   <div className=" flex flex-wrap">
                     <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
                       <FormField
                         control={form.control}
-                        name="username"
+                        name="name"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Name</FormLabel>
@@ -120,6 +123,21 @@ export function AddStudentForm() {
                                 placeholder="Enter roll number"
                                 {...field}
                               />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
+                      <FormField
+                        control={form.control}
+                        name="class"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Class</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Class" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -171,6 +189,7 @@ export function AddStudentForm() {
                           <FormItem>
                             <FormLabel>Fee Type</FormLabel>
                             <Select
+                              name="feeType"
                               onValueChange={field.onChange}
                               defaultValue={field.value}
                             >
@@ -197,7 +216,7 @@ export function AddStudentForm() {
                     <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
                       <FormField
                         control={form.control}
-                        name="feeAmount"
+                        name="amount"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Fee Amount</FormLabel>
@@ -206,7 +225,9 @@ export function AddStudentForm() {
                                 type="number"
                                 placeholder="Enter monthly fee"
                                 {...field}
-                                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                                onChange={(e) =>
+                                  field.onChange(parseFloat(e.target.value))
+                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -217,10 +238,12 @@ export function AddStudentForm() {
                     <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
                       <FormField
                         control={form.control}
-                        name="enrollment_date"
+                        name="enrollmentDate"
                         render={({ field }) => (
                           <FormItem className="flex flex-col gap-y-[6px]">
-                            <FormLabel className="mt-1">Enrollment Date</FormLabel>
+                            <FormLabel className="mt-1">
+                              Enrollment Date
+                            </FormLabel>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <FormControl>
@@ -248,6 +271,7 @@ export function AddStudentForm() {
                                   mode="single"
                                   selected={field.value}
                                   onSelect={field.onChange}
+                                  name="enrollmentDate"
                                   disabled={(date) =>
                                     date > new Date() ||
                                     date < new Date("1900-01-01")
@@ -261,7 +285,7 @@ export function AddStudentForm() {
                       />
                     </div>
                     <div className="md:mt-5 w-full md:w-1/2 pr-0 md:pr-4 flex justify-end">
-                      <Button type="submit" >Submit</Button>
+                      <Button type="submit">Submit</Button>
                     </div>
                   </div>
                 </form>

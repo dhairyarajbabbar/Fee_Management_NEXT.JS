@@ -1,92 +1,75 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Payment, columns } from "./FeeTables/columns";
 import { DataTable } from "./FeeTables/data-table";
 import { AddFeeButton } from "./addFee/addFee";
+const baseUrl = "http://localhost:5000/v1";
+async function getData() {
+  try {
+    const res = await fetch(`${baseUrl}/fee/detail`, {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+      mode: "cors",
+    });
+    const jsonData = await res.json();
+    // console.log(jsonData);
+    return jsonData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
+async function getStudents() {
+  try {
+    const res = await fetch(`${baseUrl}/student/id`, {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+      mode: "cors",
+    });
+    const jsonData = await res.json();
+    return jsonData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
 
-export default function Student() {
-  const data = [
-    {
-      roll_no: 1,
-      name: "Rohan",
-      enrollment_date: "01/03/2022",
-      payment_month: "January",
-      due_fee: 1000,
-      fee_statuses: [
-        {
-          payment_id: 2323,
-          fee_type: "Registration Fee",
-          amount: 500,
-          status: "Paid",
-          due_date: "01/04/2024",
-        },
-      ],
-    },
-    {
-      roll_no: 2,
-      name: "Rohan",
-      enrollment_date: "01/03/2022",
-      payment_month: "January",
-      due_fee: 2000,
-      fee_statuses: [
-        {
-          payment_id: 2323,
-          fee_type: "Registration Fee",
-          amount: 500,
-          status: "Paid",
-          due_date: "01/04/2024",
-        },
-      ],
-    },
-    {
-      roll_no: 3,
-      name: "Rohan",
-      enrollment_date: "01/03/2022",
-      payment_month: "January",
-      due_fee: 1500,
-      fee_statuses: [
-        {
-          payment_id: 2323,
-          fee_type: "Registration Fee",
-          amount: 500,
-          status: "Paid",
-          due_date: "01/04/2024",
-        },
-        {
-          payment_id: 7657,
-          fee_type: "Registration Fee",
-          amount: 1000,
-          status: "Paid",
-          due_date: "01/04/2024",
-        },
-      ],
-    },
-    {
-      roll_no: 4,
-      name: "Rohan",
-      enrollment_date: "01/03/2022",
-      payment_month: "January",
-      due_fee: 1800,
-      fee_statuses: [
-        {
-          payment_id: 2323,
-          fee_type: "Registration Fee",
-          amount: 500,
-          status: "Paid",
-          due_date: "01/04/2024",
-        },
-      ],
-    },
-  ];
+export default async function Fee() {
+  const data = await getData();
+  const students = await getStudents();
+  async function formProcessor(formdata) {
+    "use server";
+    console.log(formdata);
+    const feeResponse = await fetch(`http://localhost:5000/v1/fee/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(formdata),
+      mode: "cors",
+    });
+    if (feeResponse.ok) {
+      const feeResult = await feeResponse.json();
+      console.log("Fee creation response:", feeResult);
+    } else {
+      console.error("Failed to create fee. Status:", feeResponse.status);
+    }
+  }
   return (
     <div className="">
       <div className="flex justify-between items-center">
         <header className="text-[36px] font-[700]">Fee</header>
-        <AddFeeButton/>
+        <AddFeeButton action={formProcessor} data={students}/>
       </div>
-      <div>
+      <div className="pt-4">
         <DataTable columns={columns} data={data} />
       </div>
     </div>
   );
 }
+

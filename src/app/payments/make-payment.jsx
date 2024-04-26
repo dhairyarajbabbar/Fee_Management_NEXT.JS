@@ -3,11 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { date, z } from "zod";
 import { CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { toast } from "@/components/ui/use-toast";
 
 import {
   Form,
@@ -23,7 +25,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Select,
   SelectContent,
@@ -39,18 +40,19 @@ const formSchema = z
   .object({
     name: z.string().min(2).max(50),
     rollNumber: z.string().min(1),
-    enrollmentDate: z.date(),
+    depositDate: z.date(),
     feeType: z.string(),
   })
   .refine((data) => {});
 
-export function MakePaymentForm() {
+export function MakePaymentForm({ action }) {
   const [isFormVisible, setisFormVisible] = React.useState(false);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      depositDate: Date.now(),
     },
   });
   React.useEffect(() => {
@@ -70,9 +72,12 @@ export function MakePaymentForm() {
     };
   }, [isFormVisible]);
 
-  function onSubmit(values) {
-    console.log(values);
+  function onSubmit(data) {
+    const formData = form.getValues();
+    console.log(formData);
+    action(formData);
   }
+
   return (
     <div className="rounded-md border">
       <Button variant="" onClick={() => setisFormVisible(!isFormVisible)}>
@@ -82,47 +87,40 @@ export function MakePaymentForm() {
       {isFormVisible && (
         <div className="fixed inset-0 z-50 p-[20px] flex justify-center items-center bg-black bg-opacity-60 modal">
           <div className="w-5/6 h-5/6 bg-white rounded-lg shadow-xl z-50 overflow-auto">
-            <div className="p-6 flex justify-between items-center">
+            <div className="p-6 flex min-w-fit justify-between items-center">
               <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-8 flex flex-wrap"
-                >
-                  <div className=" flex flex-wrap">
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
+                <form onSubmit={onSubmit} className="w-full">
+                  <div className="min-w-fit flex flex-wrap">
+                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4 md:pl-4">
                       <FormField
                         control={form.control}
-                        name="username"
+                        name="studentId"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Name" {...field} />
-                            </FormControl>
+                            <FormLabel>Student</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select the Student" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent className="max-h-[200px] overflow-y-auto">
+                                {/* {data.map((student) => (
+                                  <SelectItem key={student} value={student._id}>
+                                    {`${student.name} - ${student.rollNumber}`}
+                                  </SelectItem>
+                                ))} */}
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
-                      <FormField
-                        control={form.control}
-                        name="rollNumber"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Roll Number</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Enter roll number"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
+                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4 md:pl-4">
                       <FormField
                         control={form.control}
                         name="feeType"
@@ -130,6 +128,7 @@ export function MakePaymentForm() {
                           <FormItem>
                             <FormLabel>Fee Type</FormLabel>
                             <Select
+                              name="feeType"
                               onValueChange={field.onChange}
                               defaultValue={field.value}
                             >
@@ -153,10 +152,10 @@ export function MakePaymentForm() {
                         )}
                       />
                     </div>
-                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
+                    <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4 md:pl-4">
                       <FormField
                         control={form.control}
-                        name="deposit_date"
+                        name="depositDate"
                         render={({ field }) => (
                           <FormItem className="flex flex-col gap-y-[6px]">
                             <FormLabel className="mt-1">Deposit Date</FormLabel>
@@ -187,6 +186,8 @@ export function MakePaymentForm() {
                                   mode="single"
                                   selected={field.value}
                                   onSelect={field.onChange}
+                                  onDayClick={field.onChange}
+                                  name="depositDate"
                                   disabled={(date) =>
                                     date > new Date() ||
                                     date < new Date("1900-01-01")
@@ -200,7 +201,7 @@ export function MakePaymentForm() {
                       />
                     </div>
                   </div>
-                  <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4">
+                  <div className="mb-8 w-full md:w-1/2 pr-0 md:pr-4 md:pl-4">
                     <Button type="submit">Submit</Button>
                   </div>
                 </form>

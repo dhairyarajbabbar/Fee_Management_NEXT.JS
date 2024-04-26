@@ -6,7 +6,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
 export const columns = [
   {
-    accessorKey: "roll_no",
+    accessorKey: "rollNumber",
     header: ({ column }) => {
       return (
         <Button
@@ -25,11 +25,11 @@ export const columns = [
     header: "Name",
   },
   {
-    accessorKey: "enrollment_date",
+    accessorKey: "enrollmentDate",
     header: "Enrollment Date",
   },
   {
-    accessorKey: "due_fee",
+    accessorKey: "dueFee",
     header: ({ column }) => {
       return (
         <Button
@@ -47,11 +47,11 @@ export const columns = [
 
 export const single_table_columns = [
   {
-    accessorKey: "payment_id",
+    accessorKey: "paymentId",
     header: "Payment Id",
   },
   {
-    accessorKey: "fee_type",
+    accessorKey: "feeType",
     header: "Fee Type",
   },
   {
@@ -75,7 +75,7 @@ export const single_table_columns = [
     header: "Status",
   },
   {
-    accessorKey: "due_date",
+    accessorKey: "dueDate",
     header: ({ column }) => {
       return (
         <Button

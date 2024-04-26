@@ -1,93 +1,72 @@
 import { Payment, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { AddStudentForm } from "./add_student";
-export default function Student() {
-  const students = [
-    {
-      name: "Rohan",
-      roll_no: 1,
-      class: "5th",
-      contact: "9211650429",
-      due_fee: 5000,
-    },
-    {
-      name: "Sara",
-      roll_no: 2,
-      class: "6th",
-      contact: "9876543210",
-      due_fee: 3000,
-    },
-    {
-      name: "John",
-      roll_no: 3,
-      class: "7th",
-      contact: "1234567890",
-      due_fee: 2000,
-    },
-    {
-      name: "Emily",
-      roll_no: 4,
-      class: "8th",
-      contact: "9876543210",
-      due_fee: 1000,
-    },
-    {
-      name: "Michael",
-      roll_no: 5,
-      class: "9th",
-      contact: "9876543210",
-      due_fee: 2500,
-    },
-    {
-      name: "Sophia",
-      roll_no: 6,
-      class: "10th",
-      contact: "9876543210",
-      due_fee: 4000,
-    },
-    {
-      name: "Ethan",
-      roll_no: 7,
-      class: "11th",
-      contact: "9876543210",
-      due_fee: 1500,
-    },
-    {
-      name: "Olivia",
-      roll_no: 8,
-      class: "12th",
-      contact: "9876543210",
-      due_fee: 3500,
-    },
-    {
-      name: "James",
-      roll_no: 9,
-      class: "5th",
-      contact: "9876543210",
-      due_fee: 2800,
-    },
-    {
-      name: "Ava",
-      roll_no: 10,
-      class: "6th",
-      contact: "9876543210",
-      due_fee: 2000,
-    },
-    {
-      name: "Noah",
-      roll_no: 11,
-      class: "7th",
-      contact: "9876543210",
-      due_fee: 3200,
-    },
-  ];
+async function getData() {
+  try {
+    const res = await fetch(`http://localhost:5000/v1/student/withdue`, {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+      mode: "cors",
+    });
+    const jsonData = await res.json();
+    // console.log(jsonData);
+    return jsonData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
+
+export default async function Student() {
+  const students = await getData();
+  async function formProcessor(formdata){
+    "use server";
+    const response = await fetch(`http://localhost:5000/v1/student/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(formdata),
+
+      mode: "cors",
+    });
+    console.log(formdata);
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Response data:', result);
+      formdata.studentId = result.id;
+
+      const feeResponse = await fetch(`http://localhost:5000/v1/fee/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formdata),
+        mode: "cors",
+      });
+
+      if (feeResponse.ok) {
+        const feeResult = await feeResponse.json();
+        console.log('Fee creation response:', feeResult);
+      } else {
+        console.error('Failed to create fee. Status:', feeResponse.status);
+      }
+    } else {
+      console.error('Failed to create student. Status:', response.status);
+    }
+  }
   return (
     <div className="">
       <div className="flex justify-between items-center">
         <header className="text-[36px] font-[700]">Students</header>
-        <AddStudentForm />
+        <AddStudentForm action={formProcessor} />
       </div>
-      <div>
+      <div className="pt-4">
         <DataTable columns={columns} data={students} />
       </div>
     </div>
