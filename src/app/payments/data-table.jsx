@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -14,17 +14,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-export function DataTable({
-  columns,
-  data,
-}) {
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+export function DataTable({ columns, data, editPayment, deletePayment }) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
   return (
     <div className="rounded-md border">
@@ -42,8 +50,9 @@ export function DataTable({
                           header.getContext()
                         )}
                   </TableHead>
-                )
+                );
               })}
+              <TableHead>Actions</TableHead>
             </TableRow>
           ))}
         </TableHeader>
@@ -59,6 +68,36 @@ export function DataTable({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          navigator.clipboard.writeText(student.rollNumber)
+                        }
+                      >
+                        Copy Roll Number
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => editPayment(row.original._id)}
+                      >
+                        Edit Student
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => deletePayment(row.original._id)}
+                      >
+                        Delete Student
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -71,5 +110,5 @@ export function DataTable({
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }

@@ -13,7 +13,7 @@ async function getData() {
       mode: "cors",
     });
     const jsonData = await res.json();
-    console.log(jsonData);
+    // console.log(jsonData);
     return jsonData;
   } catch (error) {}
   console.error("Error fetching data:", error);
@@ -24,7 +24,7 @@ export default async function Payments() {
   const payments = await getData();
   async function formProcessor(formData){
     "use server";
-    console.log(formData);
+    // console.log(formData);
   }
   return (
     <div className="">

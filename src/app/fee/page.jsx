@@ -2,18 +2,23 @@ import { Payment, columns } from "./FeeTables/columns";
 import { DataTable } from "./FeeTables/data-table";
 import { AddFeeButton } from "./addFee/addFee";
 const baseUrl = "http://localhost:5000/v1";
+import { cookies } from 'next/headers'
+
 async function getData() {
   try {
+    const cookieStore = cookies()
+    const token = cookieStore.get('accessToken') 
     const res = await fetch(`${baseUrl}/fee/detail`, {
       method: "GET",
       cache: "no-store",
       headers: {
         Accept: "application/json",
+        Authorization: `Bearer ${token.value}`, 
       },
       mode: "cors",
+      credentials: "include", 
     });
     const jsonData = await res.json();
-    // console.log(jsonData);
     return jsonData;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -43,15 +48,19 @@ export default async function Fee() {
   const students = await getStudents();
   async function formProcessor(formdata) {
     "use server";
+    const cookieStore = cookies()
+    const token = cookieStore.get('accessToken') 
     console.log(formdata);
     const feeResponse = await fetch(`http://localhost:5000/v1/fee/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Authorization: `Bearer ${token.value}`, 
       },
       body: JSON.stringify(formdata),
       mode: "cors",
+      credentials: "include", 
     });
     if (feeResponse.ok) {
       const feeResult = await feeResponse.json();
@@ -60,6 +69,46 @@ export default async function Fee() {
       console.error("Failed to create fee. Status:", feeResponse.status);
     }
   }
+  async function editFee(studentId) {
+    "use server";
+    console.log(studentId);
+  }
+  async function deleteFee(studentId) {
+    "use server";
+    console.log(studentId);
+    // try {
+    //   const response = await fetch(`${Url}/student/${studentId}`, {
+    //     method: "DELETE",
+    //     mode: "cors",
+    //   });
+
+    //   if (response.ok) {
+    //     console.log(`Student with ID ${studentId} deleted successfully`);
+    //   } else {
+    //     console.error('Failed to delete student. Status:', response.status);
+    //   }
+    // } catch (error) {
+    //   console.error("Error deleting student:", error);
+    // }
+  }
+  async function payFee(studentId) {
+    "use server";
+    console.log(studentId);
+    // try {
+    //   const response = await fetch(`${Url}/student/${studentId}`, {
+    //     method: "DELETE",
+    //     mode: "cors",
+    //   });
+
+    //   if (response.ok) {
+    //     console.log(`Student with ID ${studentId} deleted successfully`);
+    //   } else {
+    //     console.error('Failed to delete student. Status:', response.status);
+    //   }
+    // } catch (error) {
+    //   console.error("Error deleting student:", error);
+    // }
+  }
   return (
     <div className="">
       <div className="flex justify-between items-center">
@@ -67,7 +116,7 @@ export default async function Fee() {
         <AddFeeButton action={formProcessor} data={students}/>
       </div>
       <div className="pt-4">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={data} editFee={editFee} deleteFee={deleteFee} payFee={payFee}/>
       </div>
     </div>
   );

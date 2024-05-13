@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   ColumnDef,
@@ -10,6 +10,7 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 
+
 import {
   Table,
   TableBody,
@@ -18,15 +19,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRouter, usePathname } from "next/navigation";
 import SingleFeeTable from "./single-fee-table";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, editFee, deleteFee, payFee }) {
   const [sorting, setSorting] = React.useState([]);
   const [selectedRow, setSelectedRow] = React.useState(null);
   const [isComponentVisible, setIsComponentVisible] = React.useState(false);
   const componentRef = React.useRef(null);
 
+  
   React.useEffect(() => {
     function handleClickOutside(event) {
       const { target } = event;
@@ -61,8 +62,6 @@ export function DataTable({ columns, data }) {
       sorting,
     },
   });
-  const router = useRouter();
-  const pathname = usePathname();
   return (
     <div className="rounded-md border">
       {isComponentVisible && (
@@ -71,6 +70,9 @@ export function DataTable({ columns, data }) {
           selectedRow={selectedRow}
           setIsComponentVisible={setIsComponentVisible}
           data={data}
+          deleteFee={deleteFee}
+          editFee={editFee}
+          payFee={payFee}
         />
       )}
 
@@ -106,6 +108,7 @@ export function DataTable({ columns, data }) {
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
+                
               </TableRow>
             ))
           ) : (

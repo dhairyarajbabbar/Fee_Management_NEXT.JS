@@ -10,9 +10,9 @@ export default function SingleFeeTable(props) {
     >
       <div className="w-4/5 h-3/4 bg-white rounded-lg shadow-xl z-50 overflow-auto">
         <div className="p-4 flex justify-between items-center">
-          <h2 className="text-xl font-semibold">
-            Details for {props.selectedRow?.name} {props.selectedRow.payment_month}
-          </h2>
+          <h3 className="text-xl font-semibold">
+            Fee Details for {props.selectedRow?.name} {props.selectedRow.payment_month}
+          </h3>
           <button
             className="text-[30px] font-semibold "
             onClick={() => props.setIsComponentVisible(false)}
@@ -20,7 +20,7 @@ export default function SingleFeeTable(props) {
             &times;
           </button>
         </div>
-        <SingleDataTable columns={single_table_columns} data={props.selectedRow.feeDetails}/>
+        <SingleDataTable columns={single_table_columns} data={props.selectedRow.feeDetails} editFee={props.editFee} deleteFee={props.deleteFee} payFee={props.payFee}/>
       </div>
     </div>
   );

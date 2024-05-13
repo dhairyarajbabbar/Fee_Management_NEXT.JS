@@ -1,13 +1,21 @@
-"use client";
-
+"use client"
+import React, { useState, useEffect } from "react";
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useRouter, usePathname } from "next/navigation";
-
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -16,15 +24,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DeleteStudentForm } from "./deleteStudent";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, editStudent, deleteStudent }) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-  const router = useRouter();
-  const pathname = usePathname();
+
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [studentIdToDelete, setStudentIdToDelete] = useState(null);
+  const [studentNameToDelete, setStudentNameToDelete] = useState("");
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const { target } = event;
+      if (showDeleteForm && target.classList.contains("modal")) {
+        setShowDeleteForm(false);
+      }
+    }
+
+    if (showDeleteForm) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDeleteForm]);
+
+  const handleDeleteClick = (studentId, studentName) => {
+    setStudentIdToDelete(studentId);
+    setStudentNameToDelete(studentName);
+    setShowDeleteForm(true);
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -34,33 +71,37 @@ export function DataTable({ columns, data }) {
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 );
               })}
+              <TableHead>Actions</TableHead>
             </TableRow>
           ))}
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                // onClick={() => {
-                //   router.push(`${pathname}/${data[row.id].roll_no}`);
-                // }}
-                data-state={row.getIsSelected() && "selected"}
-              >
+              <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+                  <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                 ))}
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem onClick={() => navigator.clipboard.writeText(student.rollNumber)}>Copy Roll Number</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => editStudent(row.original._id)}>Edit Student</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDeleteClick(row.original._id, row.original.name)}>Delete Student</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -72,6 +113,15 @@ export function DataTable({ columns, data }) {
           )}
         </TableBody>
       </Table>
+      {showDeleteForm && (
+        <div className="fixed inset-0 z-50 p-[20px] flex justify-center items-center bg-black bg-opacity-60 modal">
+          <DeleteStudentForm
+            studentName={studentNameToDelete}
+            deleteStudent={deleteStudent}
+            _id={studentIdToDelete}
+          />
+        </div>
+      )}
     </div>
   );
 }
