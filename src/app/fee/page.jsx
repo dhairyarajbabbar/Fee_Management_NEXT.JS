@@ -1,7 +1,7 @@
 import { Payment, columns } from "./FeeTables/columns";
 import { DataTable } from "./FeeTables/data-table";
 import { AddFeeButton } from "./addFee/addFee";
-const baseUrl = "http://localhost:5000/v1";
+const baseUrl = "https://feez-backend-node.vercel.app/v1";
 import { cookies } from 'next/headers'
 
 async function getData() {
@@ -50,7 +50,7 @@ export default async function Fee() {
     const cookieStore = cookies()
     const token = cookieStore.get('accessToken') 
     console.log(formdata);
-    const feeResponse = await fetch(`http://localhost:5000/v1/fee/`, {
+    const feeResponse = await fetch(`${baseUrl}/fee/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

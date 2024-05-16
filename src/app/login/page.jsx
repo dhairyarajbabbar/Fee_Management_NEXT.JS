@@ -8,7 +8,7 @@ export default async function Student() {
 
   async function formProcessor(formdata) {
     "use server";
-    const response = await fetch(`http://localhost:5000/v1/auth/school/login`, {
+    const response = await fetch(`${Url}/auth/school/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

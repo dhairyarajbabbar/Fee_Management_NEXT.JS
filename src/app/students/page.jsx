@@ -3,14 +3,14 @@ import { DataTable } from "./data-table";
 import { AddStudentForm } from "./add_student";
 import { cookies } from "next/headers";
 
-const Url = "http://localhost:5000/v1";
+const baseUrl = "https://feez-backend-node.vercel.app/v1";
 
 async function getData() {
   try {
     const cookieStore = cookies();
     const token = cookieStore.get("accessToken");
     // console.log(token);
-    const res = await fetch(`https://feez-backend-node.vercel.app/v1/student/withdue`, {
+    const res = await fetch(`${baseUrl}/student/withdue`, {
       method: "GET",
       cache: "no-store",
       headers: {
@@ -36,7 +36,7 @@ export default async function Student() {
     "use server";
     const cookieStore = cookies();
     const token = cookieStore.get("accessToken");
-    const response = await fetch(`http://localhost:5000/v1/student/`, {
+    const response = await fetch(`${baseUrl}/student/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export default async function Student() {
       console.log("Response data:", result);
       formdata.studentId = result.id;
 
-      const feeResponse = await fetch(`http://localhost:5000/v1/fee/`, {
+      const feeResponse = await fetch(`${baseUrl}/fee/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { MakePaymentForm } from "./make-payment"; 
-const baseUrl="http://localhost:5000/v1";
+const baseUrl="https://feez-backend-node.vercel.app/v1";
 async function getData() {
   try {
     const res = await fetch(`${baseUrl}/payment/details`, {
