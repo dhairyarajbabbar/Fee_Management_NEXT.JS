@@ -20,6 +20,7 @@ async function getData() {
   throw error;
 }
 
+export const dynamic = 'force-dynamic'
 export default async function Payments() {
   const payments = await getData();
   async function formProcessor(formData){

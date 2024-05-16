@@ -29,7 +29,7 @@ async function getData() {
     // throw error;
   }
 }
-
+export const dynamic = 'force-dynamic'
 export default async function Student() {
   const students = await getData();
   async function addStudentFormProcessor(formdata) {
