@@ -6,9 +6,9 @@ import { cookies } from "next/headers";
 const baseUrl = "https://feez-backend-node.vercel.app/v1";
 
 async function getData() {
+  const cookieStore = cookies();
+  const token = cookieStore.get("accessToken");
   try {
-    const cookieStore = cookies();
-    const token = cookieStore.get("accessToken");
     // console.log(token);
     const res = await fetch(`${baseUrl}/student/withdue`, {
       method: "GET",
@@ -29,7 +29,6 @@ async function getData() {
     // throw error;
   }
 }
-export const dynamic = 'force-dynamic'
 export default async function Student() {
   const students = await getData();
   async function addStudentFormProcessor(formdata) {

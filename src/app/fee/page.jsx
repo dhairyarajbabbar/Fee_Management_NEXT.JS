@@ -5,9 +5,9 @@ const baseUrl = "https://feez-backend-node.vercel.app/v1";
 import { cookies } from 'next/headers'
 
 async function getData() {
+  const cookieStore = cookies()
+  const token = cookieStore.get('accessToken') 
   try {
-    const cookieStore = cookies()
-    const token = cookieStore.get('accessToken') 
     const res = await fetch(`${baseUrl}/fee/detail`, {
       method: "GET",
       cache: "no-store",
