@@ -10,7 +10,7 @@ async function getData() {
     const cookieStore = cookies();
     const token = cookieStore.get("accessToken");
     // console.log(token);
-    const res = await fetch(`http://localhost:5000/v1/student/withdue`, {
+    const res = await fetch(`https://feez-backend-node.vercel.app/v1/student/withdue`, {
       method: "GET",
       cache: "no-store",
       headers: {

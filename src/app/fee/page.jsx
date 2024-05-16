@@ -42,11 +42,10 @@ async function getStudents() {
     throw error;
   }
 }
-
 export default async function Fee() {
   const data = await getData();
   const students = await getStudents();
-  async function formProcessor(formdata) {
+  async function feeFormProcessor(formdata) {
     "use server";
     const cookieStore = cookies()
     const token = cookieStore.get('accessToken') 
@@ -113,7 +112,7 @@ export default async function Fee() {
     <div className="">
       <div className="flex justify-between items-center">
         <header className="text-[36px] font-[700]">Fee</header>
-        <AddFeeButton action={formProcessor} data={students}/>
+        <AddFeeButton action={feeFormProcessor} data={students}/>
       </div>
       <div className="pt-4">
         <DataTable columns={columns} data={data} editFee={editFee} deleteFee={deleteFee} payFee={payFee}/>
