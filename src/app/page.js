@@ -5,9 +5,8 @@ export default async function Home() {
   const cookieStore = cookies();
   const token = cookieStore.get("accessToken");
   let redirectPath = "/login";
-
-  console.log("token by me : ", token);
-  if (token.value) {
+  // console.log("token : ", token);
+  if (token?.value) {
     redirectPath = "/students";
   }
   if (redirectPath) redirect(redirectPath);
