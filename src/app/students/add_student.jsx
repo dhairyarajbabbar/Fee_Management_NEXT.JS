@@ -75,7 +75,6 @@ export function AddStudentForm({ action }) {
   }, [isFormVisible]);
 
   function onSubmit(e) {
-    e.preventDefault();
     const formData = form.getValues();
     console.log(formData);
     action(formData); 
