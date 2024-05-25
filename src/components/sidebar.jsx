@@ -54,7 +54,7 @@ export default function Sidebar() {
     }
   ]
 
-  return <div className="fixed flex flex-col gap-4 w-[170px] border-r min-h-screen p-4">
+  return <div className="fixed flex flex-col gap-4 w-[170px] border-r min-h-screen p-4 bg-white">
     <div className="grow">
       <Command style={{ overflow: 'visible' }}>
         <CommandList style={{ overflow: 'visible' }}>

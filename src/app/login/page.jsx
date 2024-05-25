@@ -56,7 +56,7 @@ export default async function Student() {
   return (
     <div className="">
       <div className="items-center">
-        <header className="text-[36px] font-[700]">Login</header>
+        <header className="text-[36px] font-[700]" >Login</header>
         <LoginForm action={formProcessor} />
       </div>
     </div>
