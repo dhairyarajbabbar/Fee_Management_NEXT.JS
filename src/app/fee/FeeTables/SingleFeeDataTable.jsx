@@ -126,12 +126,12 @@ export function SingleDataTable({ columns, data, editFee, deleteFee, payFee }) {
                         Edit Fee
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => handleDeleteClick(row.original._id)}
+                        onClick={() => handleDeleteClick(row.original.feeId)}
                       >
                         Delete Fee
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => handlePayFeeClick(row.original._id)}
+                        onClick={() => handlePayFeeClick(row.original.feeId)}
                       >
                         Mark as Paid
                       </DropdownMenuItem>

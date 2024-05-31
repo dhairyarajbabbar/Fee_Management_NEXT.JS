@@ -1,5 +1,5 @@
 "use client";
-import { SingleDataTable } from "./table-toConvertToDataTable";
+import { SingleDataTable } from "./SingleFeeDataTable";
 import { single_table_columns } from "./columns";
 
 export default function SingleFeeTable(props) {

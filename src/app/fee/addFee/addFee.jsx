@@ -103,7 +103,7 @@ export function AddFeeButton({ action, data }) {
                               </FormControl>
                               <SelectContent className="max-h-[200px] overflow-y-auto">
                                 {data.map((student) => (
-                                  <SelectItem key={student} value={student._id}>
+                                  <SelectItem key={student} value={student.id}>
                                     {`${student.name} - ${student.rollNumber}`}
                                   </SelectItem>
                                 ))}

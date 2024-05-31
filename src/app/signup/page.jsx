@@ -1,4 +1,4 @@
-import { LoginForm } from "./loginForm";
+import { SignupForm } from "./signupForm";
 import { cookies } from "next/headers";
 import { redirect } from 'next/navigation'
 export const dynamic = 'force-dynamic'
@@ -6,7 +6,7 @@ export default async function Student() {
 
   async function formProcessor(formdata) {
     "use server";
-    const response = await fetch(`${process.env.baseUrl}/auth/school/login`, {
+    const response = await fetch(`${process.env.baseUrl}/auth/school/register/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,6 +16,10 @@ export default async function Student() {
       mode: "cors",
       credentials: "include",
     });
+    console.log(response);
+    if(response.ok)
+      redirect('/login');
+
     if (response.ok) {
       const headers = response.headers;
       const cookiesHeader = headers.get("Set-Cookie");
@@ -37,13 +41,12 @@ export default async function Student() {
             }
           });
           console.log(options);
-          // const exp=options?.expires;
           cookies().set(name.trim(), value.trim(), {
             httpOnly: true,
             path: "/",
             expires: new Date(options.expires),
           });
-          redirect('/students');
+          redirect('/login');
         }
       }
       const result = await response.json();
@@ -55,8 +58,8 @@ export default async function Student() {
   return (
     <div className="">
       <div className="items-center">
-        {/* <header className="text-[36px] font-[700]" >Login</header> */}
-        <LoginForm action={formProcessor} />
+        <header className="text-[36px] font-[700]" >Sign Up</header>
+        <SignupForm action={formProcessor} />
       </div>
     </div>
   );

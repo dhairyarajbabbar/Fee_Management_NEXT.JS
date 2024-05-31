@@ -1,10 +1,10 @@
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { MakePaymentForm } from "./make-payment"; 
-const baseUrl="https://feez-backend-node.vercel.app/v1";
+// const baseUrl="https://feez-backend-node.vercel.app/v1";
 async function getData() {
   try {
-    const res = await fetch(`${baseUrl}/payment/details`, {
+    const res = await fetch(`${process.env.baseUrl}/payment/details`, {
       method: "GET",
       cache: "no-store",
       headers: {
@@ -15,9 +15,10 @@ async function getData() {
     const jsonData = await res.json();
     // console.log(jsonData);
     return jsonData;
-  } catch (error) {}
-  console.error("Error fetching data:", error);
-  throw error;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
 }
 
 export const dynamic = 'force-dynamic'

@@ -3,14 +3,11 @@ import { DataTable } from "./data-table";
 import { AddStudentForm } from "./add_student";
 import { cookies } from "next/headers";
 
-const baseUrl = "https://feez-backend-node.vercel.app/v1";
-
 async function getData() {
   const cookieStore = cookies();
   const token = cookieStore.get("accessToken");
   try {
-    // console.log(token);
-    const res = await fetch(`${baseUrl}/student/withdue`, {
+    const res = await fetch(`${process.env.baseUrl}/student/withdue`, {
       method: "GET",
       cache: "no-store",
       headers: {
@@ -89,7 +86,6 @@ export default async function Student() {
           Authorization: `Bearer ${token.value}`,
         },
         credentials: "include",
-        credentials: "same-origin",
       });
       if (response.ok) {
         console.log(`Student with ID ${studentId} deleted successfully`);

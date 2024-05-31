@@ -1,39 +1,22 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import React from "react";
 
-const today = new Date();
+import React from "react";
 
 const formSchema = z
   .object({
@@ -49,60 +32,69 @@ export function LoginForm({ action }) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      email: "",
+      password: "",
     },
   });
+
   function onSubmit(e) {
     e.preventDefault();
     const formData = form.getValues();
     console.log(formData);
     action(formData);
   }
+
   return (
-    <div className="p-6 flex rounded-md border justify-between items-center">
-      <Form {...form}>
-        <form onSubmit={onSubmit} className="w-full">
-          <div className=" w-full">
-            <div className="mb-8 w-full md:w-2/3">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter Email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <div className="p-0 flex justify-center items-center min-h-screen">
+      <div className="w-full max-w-md">
+        <Form {...form}>
+          <form onSubmit={onSubmit} className="w-full">
+          <header className="text-[36px] font-[700]" >Login</header>
+            <div className="w-full flex flex-col items-center">
+              <div className="mb-8 w-full">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter Email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="mb-8 w-full">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Enter password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="mt-5 w-full flex flex-col items-center">
+                <Button type="submit" className="mb-4">Submit</Button>
+                <Link href="/signup">
+                  <div className="text-black hover:underline">Don't have an account? Sign Up</div>
+                </Link>
+              </div>
             </div>
-            <div className="mb-8 w-full md:w-2/3">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="md:mt-5 w-full md:w-2/3 flex justify-between">
-              <Button type="submit">Submit</Button>
-            </div>
-          </div>
-        </form>
-      </Form>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }
