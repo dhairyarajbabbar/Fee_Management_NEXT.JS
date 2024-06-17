@@ -1,10 +1,7 @@
 import { Payment, columns } from "./FeeTables/columns";
 import { DataTable } from "./FeeTables/data-table";
 import { AddFeeButton } from "./addFee/addFee";
-// const baseUrl = "https://feez-backend-node.vercel.app/v1";
-// const baseUrl = "https://feez-backend-node.vercel.app/v1";
 import { cookies } from 'next/headers'
-
 async function getData() {
   const cookieStore = cookies()
   const token = cookieStore.get('accessToken') 
@@ -49,7 +46,6 @@ async function getStudents() {
 export default async function Fee() {
   const data = await getData();
   const students = await getStudents();
-  // console.log(students);
   async function feeFormProcessor(formdata) {
     "use server";
     const cookieStore = cookies()
@@ -100,18 +96,20 @@ export default async function Fee() {
     const cookieStore = cookies()
     const token = cookieStore.get('accessToken')
     try {
-      const response = await fetch(`${process.env.baseUrl}/payment/cash/${feeId}`, {
+      const response = await fetch(`${process.env.baseUrl}/payment`, {
         method: "POST",
         mode: "cors",
         headers: {
           Authorization: `Bearer ${token.value}`,
+          'Content-Type': 'application/json', 
         },
+        body: JSON.stringify({feeId:feeId}),
         credentials: "include",
       });
       if (response.ok) {
-        console.log(`Fee with ID ${feeId} deleted successfully`);
+        console.log(`Payment made for ${feeId} successfully`);
       } else {
-        console.error('Failed to delete student. Status:', response.status);
+        console.error(`Failed to make payment for feeId ${feeId}:`, response.status);
       }
     } catch (error) {
       console.error("Error deleting student:", error);

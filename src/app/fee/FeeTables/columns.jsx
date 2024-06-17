@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { format } from "date-fns";
 
 export const columns = [
   {
@@ -44,6 +45,7 @@ export const columns = [
     },
   },
 ];
+
 
 export const single_table_columns = [
   {
@@ -87,6 +89,10 @@ export const single_table_columns = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      const date = new Date(row.original.dueDate);
+      return format(date, "dd-MM-yyyy");
     },
   },
 ];

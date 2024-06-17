@@ -1,36 +1,35 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 
 export const columns = [
   {
-    accessorKey: "roll_no",
+    accessorKey: "rollNumber",
     header: "Roll No",
   },
   {
-    accessorKey: "Name",
+    accessorKey: "name",
     header: "Name",
   },
   {
-    accessorKey: "PaymentDate",
+    accessorKey: "paymentDate",
     header: "Payment date",
     cell: ({ row }) => {
-      const date = new Date(row.getValue("PaymentDate"));
-      const formatted = date.toLocaleDateString('en-US')
-
-      return <div className="text-right font-medium">{formatted}</div>;
+      const date = new Date(row.original.paymentDate);
+      return format(date, "dd-MM-yyyy");
     },
   },
   {
-    accessorKey: "payment_month",
+    accessorKey: "paymentForMonth",
     header: "Paymet For Month",
   },
   {
-    accessorKey: "Method",
+    accessorKey: "method",
     header: "Method",
   },
   {
-    accessorKey: "Amount",
+    accessorKey: "paymentAmount",
     header: "Payment Amount",
   },
   {
